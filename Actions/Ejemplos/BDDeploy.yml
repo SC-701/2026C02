@@ -1,13 +1,16 @@
 name: Deploy Database to Azure SQL
 
 env:
-  DACPAC_PATH: './BD/bin/Release/BD.dacpac'   # Ruta al dacpac generado
+  BD_FOLDER: 'BD'                          # Carpeta del proyecto de base de datos
+  BD_PROJECT: 'BD.sqlproj'                 # Nombre del archivo .sqlproj
+  BD_DACPAC: 'BD.dacpac'                   # Nombre del dacpac generado (normalmente igual al proyecto)
+  SOLUTION_FILE: 'MiSolucion.sln'          # Nombre del archivo .sln (para restore de NuGet)
 
 on:
   push:
     branches: [ "main" ]
     paths:
-      - 'BD/**'
+      - '${{ env.BD_FOLDER }}/**'
   workflow_dispatch:
 
 permissions:
@@ -27,16 +30,16 @@ jobs:
         uses: NuGet/setup-nuget@v1
 
       - name: Restore NuGet packages
-        run: nuget restore
+        run: nuget restore "${{ env.SOLUTION_FILE }}"
 
       - name: Build Database Project
-        run: msbuild "BD/BD.sqlproj" /p:Configuration=Release /p:OutputPath="./bin/Release/"
+        run: msbuild "${{ env.BD_FOLDER }}/${{ env.BD_PROJECT }}" /p:Configuration=Release /p:OutputPath="./bin/Release/"
         shell: cmd
 
       - name: Deploy to Azure SQL Database
         uses: azure/sql-action@v2
         with:
           connection-string: ${{ secrets.AZURE_SQL_CONNECTION_STRING }}
-          path: ${{ env.DACPAC_PATH }}
+          path: "${{ env.BD_FOLDER }}/bin/Release/${{ env.BD_DACPAC }}"
           action: 'publish'
           arguments: '/p:DropObjectsNotInSource=false /p:BlockOnPossibleDataLoss=true'
