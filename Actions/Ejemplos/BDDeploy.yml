@@ -1,0 +1,42 @@
+name: Deploy Database to Azure SQL
+
+env:
+  DACPAC_PATH: './BD/bin/Release/BD.dacpac'   # Ruta al dacpac generado
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'BD/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-deploy-database:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v1
+
+      - name: Restore NuGet packages
+        run: nuget restore
+
+      - name: Build Database Project
+        run: msbuild "BD/BD.sqlproj" /p:Configuration=Release /p:OutputPath="./bin/Release/"
+        shell: cmd
+
+      - name: Deploy to Azure SQL Database
+        uses: azure/sql-action@v2
+        with:
+          connection-string: ${{ secrets.AZURE_SQL_CONNECTION_STRING }}
+          path: ${{ env.DACPAC_PATH }}
+          action: 'publish'
+          arguments: '/p:DropObjectsNotInSource=false /p:BlockOnPossibleDataLoss=true'
