@@ -1,0 +1,48 @@
+name: Grading PC05
+
+on:
+  - push
+  - workflow_dispatch
+  - repository_dispatch
+
+permissions:
+  checks: write
+  actions: read
+  contents: read
+
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Workflow API Deploy
+        id: check-api
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Workflow API Deploy
+          command: grep -rl "azure/webapps-deploy" .github/workflows/
+          timeout: 10
+          max-score: 50
+
+      - name: Workflow BD Deploy
+        id: check-db
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Workflow BD Deploy
+          command: >
+            grep -rl "azure/sql-action" .github/workflows/ &&
+            grep -rEl "\.sqlproj|\.dacpac" .github/workflows/
+          timeout: 10
+          max-score: 50
+
+      - name: Autograding Reporter
+        uses: classroom-resources/autograding-grading-reporter@v1
+        env:
+          CHECK-API_RESULTS: "${{ steps.check-api.outputs.result }}"
+          CHECK-DB_RESULTS: "${{ steps.check-db.outputs.result }}"
+        with:
+          runners: check-api,check-db
+

@@ -10,7 +10,7 @@ on:
   push:
     branches: [ "main" ]
     paths:
-      - '${{ env.BD_FOLDER }}/**'
+      - 'BD/**'          # Debe coincidir con el valor de BD_FOLDER
   workflow_dispatch:
 
 permissions:
