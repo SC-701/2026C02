@@ -1,0 +1,196 @@
+/* ===== Variables ===== */
+:root {
+  --primary: #1E3A8A;
+  --accent:  #F59E0B;
+  --green:   #10B981;
+  --red:     #EF4444;
+  --blue:    #3B82F6;
+  --bg-alt:  #F3F4F6;
+}
+
+/* ===== Base slide ===== */
+.slidev-layout {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  color: #1F2937;
+  font-size: 1rem;
+  padding: 2.5rem 3.5rem;
+}
+
+/* ===== Headings ===== */
+.slidev-layout h1 {
+  color: #1E3A8A;
+  border-bottom: 3px solid #F59E0B;
+  padding-bottom: 0.3rem;
+  font-size: 1.6rem;
+  margin-bottom: 0.6rem;
+}
+
+.slidev-layout h2 {
+  color: #1E3A8A;
+  font-size: 1.2rem;
+  margin-bottom: 0.4rem;
+}
+
+.slidev-layout h3 {
+  color: #3B82F6;
+  font-size: 1rem;
+  margin-bottom: 0.3rem;
+  opacity: 1 !important;
+}
+
+/* ===== Cover layout ===== */
+.slidev-layout.cover,
+.slidev-layout.cover-content {
+  background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%) !important;
+  color: white;
+}
+
+.slidev-layout.cover h1,
+.slidev-layout.cover-content h1 {
+  font-size: 2.6rem;
+  color: white;
+  border: none;
+  font-weight: 900;
+}
+
+.slidev-layout.cover h2,
+.slidev-layout.cover-content h2 {
+  color: #FCD34D;
+  border: none;
+}
+
+.slidev-layout.cover h3,
+.slidev-layout.cover-content h3 {
+  color: rgba(255,255,255,0.85);
+}
+
+/* ===== Center layout ===== */
+.slidev-layout.center {
+  text-align: center;
+}
+
+/* ===== Code ===== */
+.slidev-layout code {
+  background: #F3F4F6;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Fira Code', 'Consolas', monospace;
+}
+
+/* ===== Tables ===== */
+.slidev-layout table {
+  font-size: 0.85rem;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.slidev-layout table th {
+  background: #1E3A8A;
+  color: white;
+  padding: 0.5rem;
+}
+
+.slidev-layout table td {
+  padding: 0.4rem;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.slidev-layout table tr:nth-child(even) td {
+  background: #F9FAFB;
+}
+
+/* ===== Utility grids ===== */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+}
+
+/* ===== Fase cards ===== */
+.fase {
+  padding: 0.8rem;
+  border-radius: 12px;
+  margin: 0.5rem 0;
+  border-left: 6px solid #1E3A8A;
+  background: #F9FAFB;
+}
+
+.fase.red   { border-left-color: #EF4444; }
+.fase.green { border-left-color: #10B981; }
+.fase.blue  { border-left-color: #3B82F6; }
+
+/* ===== Regla key ===== */
+.regla {
+  background: #EFF6FF;
+  border: 2px solid #1E3A8A;
+  padding: 0.8rem 1.2rem;
+  border-radius: 12px;
+  font-weight: 600;
+  margin: 0.8rem 0;
+}
+
+/* ===== Actividad box ===== */
+.actividad {
+  background: #FEF3C7;
+  border-left: 6px solid #F59E0B;
+  padding: 0.8rem 1.2rem;
+  border-radius: 8px;
+  margin: 0.8rem 0;
+}
+
+.actividad::before {
+  content: "🖐️ Actividad práctica";
+  font-weight: 700;
+  display: block;
+  margin-bottom: 0.4rem;
+  color: #B45309;
+}
+
+/* ===== Small text ===== */
+.small-text {
+  font-size: 0.75rem;
+}
+
+/* ===== Hide bottom nav bar (NavControls inside #slide-container) ===== */
+/*
+  play.vue wraps <NavControls> in a div.absolute.bottom-0.left-0
+  and Slidev already sets opacity-0 + hover:opacity-100.
+  We reinforce that with !important to also block focus-within from
+  revealing it during a presentation.
+*/
+#slide-container nav {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity 0.25s ease !important;
+}
+
+#slide-container:hover nav {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* ===== Hide Goto dialog (slide list panel on the right) ===== */
+/*
+  When closed, Slidev adds `-top-20` class; when open, `top-5`.
+  We default to hidden and restore only when the user presses 'g'
+  (Slidev dynamically swaps the class).
+*/
+#slidev-goto-dialog {
+  display: none !important;
+}
+
+#slidev-goto-dialog[class~="top-5"] {
+  display: block !important;
+}
+
+/* ===== Hide QuickOverview overlay ===== */
+[class*="backdrop-blur"] {
+  display: none !important;
+}
+
