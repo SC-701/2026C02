@@ -1,15 +1,15 @@
 name: Build and Deploy API
 
 env:
-  AZURE_WEBAPP_NAME: mi-api-curso        # Nombre de tu App Service
-  AZURE_WEBAPP_PACKAGE_PATH: './API'     # Ruta a tu proyecto API
+  AZURE_WEBAPP_NAME: apivehiculosdiego
+  AZURE_WEBAPP_PACKAGE_PATH: './Vehiculo.API/API'
   DOTNET_VERSION: '8.0'
 
 on:
   push:
     branches: [ "main" ]
     paths-ignore:
-      - 'BD/**'          # Ajustar si la carpeta BD tiene otro nombre
+      - 'Vehiculo.API/BD/**'
   workflow_dispatch:
 
 permissions:
@@ -26,6 +26,13 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Replace connection string in appsettings.json
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/appsettings.json'
+        env:
+          ConnectionStrings.BD: ${{ secrets.AZURE_SQL_CONNECTION_STRING }}
 
       - name: Restore, Build and Publish
         run: |
