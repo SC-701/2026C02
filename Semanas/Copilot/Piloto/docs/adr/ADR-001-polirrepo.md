@@ -44,7 +44,7 @@ Se adopta el **modelo polirrepo por producto** como estándar del taller.
   Ejemplos: `Producto.Api`, `Producto.SPA`, `Producto.Doc`.
 - **Un repositorio por componente** del producto (API, SPA, Documentación, Templates, Scripts).
 - **Organización GitHub separada por departamento** para segmentar accesos y políticas.
-- **Templates de repositorio obligatorios** para arrancar nuevos repos (`Taller.Template.Api`, `Taller.Taller.Taller.Taller.Template.Spa`, `Template.Doc`).
+- **Templates de repositorio obligatorios** para arrancar nuevos repos (`SC-701/Template.API`, `SC-701/Template.SPA`, `Template.Doc`).
 - **`copilot-instructions.md` replicado en cada repo** para mantener personalización homogénea.
 - **Instructions organizacionales** para reglas transversales (evitan divergencia entre repos).
 

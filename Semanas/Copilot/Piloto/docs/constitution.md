@@ -1,4 +1,4 @@
----
+﻿---
 title: Constitution — Principios Arquitectónicos del Taller
 type: constitution
 scope: educativo
@@ -101,17 +101,17 @@ Todo commit o PR de código productivo **MUST** referenciar el AC que atiende (`
 ### 3.1 Arquitectura por capas
 Toda solución backend **MUST** organizarse en 6 capas con responsabilidades separadas:
 
-| Sigla | Capa | Responsabilidad única |
-|---|---|---|
-| **ABS** | Abstracciones | Modelos + interfaces. **MUST NOT** contener implementación. |
-| **API** | Controllers | Recibir HTTP, validar shape, delegar a Flujo. **MUST NOT** contener lógica de negocio. |
-| **BW** | Flujo | Orquestar el caso de uso (transacciones, secuencia). |
-| **BC** | Reglas | Reglas de negocio puras. **MUST NOT** hacer I/O. |
-| **SG** | Servicios | Adaptadores a servicios externos. |
-| **DA** | Data Access | Acceso a base de datos. **MUST NOT** contener lógica de negocio. |
+| Capa | Responsabilidad única |
+|---|---|
+| **Abstracciones** | Modelos + interfaces. **MUST NOT** contener implementación. |
+| **API** | Recibir HTTP, validar shape, delegar a Flujo. **MUST NOT** contener lógica de negocio. |
+| **Flujo** | Orquestar el caso de uso (transacciones, secuencia). |
+| **Reglas** | Reglas de negocio puras. **MUST NOT** hacer I/O. |
+| **Servicios** | Adaptadores a servicios externos. |
+| **AccesoDatos** | Acceso a base de datos. **MUST NOT** contener lógica de negocio. |
 
 ### 3.2 Regla de dependencia (Dependency Rule)
-Las dependencias **MUST** apuntar siempre hacia adentro: hacia `Abstracciones`. Ninguna capa **MUST** depender de detalles concretos de otra capa; solo de interfaces publicadas en `ABS`.
+Las dependencias **MUST** apuntar siempre hacia adentro: hacia `Abstracciones`. Ninguna capa **MUST** depender de detalles concretos de otra capa; solo de interfaces publicadas en `Abstracciones`.
 
 ### 3.3 Composition Root único
 La composición de dependencias (DI container, wiring de servicios) **MUST** realizarse exclusivamente en la capa `API` (composition root). Ninguna otra capa **MUST** construir instancias concretas de otras capas.
@@ -120,13 +120,13 @@ La composición de dependencias (DI container, wiring de servicios) **MUST** rea
 Cada capa **MUST** tener su propio proyecto de pruebas espejado en la carpeta `tests/`. La suite **MUST** poder ejecutarse completa desde CI.
 
 ### 3.5 Controllers "thin"
-Los controllers **MUST** limitarse a: recibir la petición HTTP, validar el shape del payload, invocar al Flujo (`BW`) y mapear la respuesta. Todo lo demás **MUST** vivir en capas inferiores.
+Los controllers **MUST** limitarse a: recibir la petición HTTP, validar el shape del payload, invocar al Flujo (`Flujo`) y mapear la respuesta. Todo lo demás **MUST** vivir en capas inferiores.
 
 ### 3.6 Reglas de negocio puras
-La capa `BC` **MUST NOT** hacer llamadas a base de datos, servicios externos, IO de archivos ni logs. **MUST** ser determinística y unit-testeable en aislamiento.
+La capa `Reglas` **MUST NOT** hacer llamadas a base de datos, servicios externos, IO de archivos ni logs. **MUST** ser determinística y unit-testeable en aislamiento.
 
 ### 3.7 Nomenclatura de proyectos
-Los proyectos **MUST** seguir la nomenclatura `<Prefijo>.<Producto>.<Capa>` (ej. `Producto.Api`, `Producto.Bw`, `Producto.Abstracciones`).
+Los proyectos **MUST** seguir la nomenclatura `<Prefijo>.<Producto>.<Capa>` (ej. `Producto.Api`, `Producto.Flujo`, `Producto.Abstracciones`).
 
 ---
 

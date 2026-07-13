@@ -1,5 +1,5 @@
----
-mode: agent
+﻿---
+agent: true
 description: Fase GREEN del ciclo TDD. Genera el código mínimo que hace pasar una prueba unitaria previamente escrita (fase RED), respetando la arquitectura por capas y SOLID.
 tools: [codebase, editFiles, runCommands]
 owner: Por definir
@@ -15,10 +15,10 @@ governs_by: constitution.md §2.2, §3, §4, §6, §7, ADR-002
 Escribir el **código mínimo necesario** para que una prueba unitaria que actualmente falla pase, sin agregar funcionalidad no cubierta por la prueba (YAGNI).
 
 ## Entradas
-- **Archivo de prueba objetivo:** `${input:archivoPrueba:Ruta relativa al archivo de test, ej. tests/Producto.Bc.Tests/ConsultorTitularesTests.cs}`
+- **Archivo de prueba objetivo:** `${input:archivoPrueba:Ruta relativa al archivo de test, ej. tests/Producto.Reglas.Tests/ConsultorTitularesTests.cs}`
 - **Nombre del test específico:** `${input:nombreTest:Nombre del método/it que debe pasar}`
 - **Stack:** `${input:stack:backend|frontend}`
-- **Capa destino (backend) o ubicación (frontend):** `${input:ubicacion:Ej. Bc, Bw, Api, features/titulares}`
+- **Capa destino (backend) o ubicación (frontend):** `${input:ubicacion:Ej. Reglas, Flujo, Api, features/titulares}`
 
 ## Contexto obligatorio a considerar
 - Constitution §2.2 (Red-Green-Refactor), §3 (arquitectura backend), §4 (arquitectura frontend), §6 (SOLID), §7 (Clean Code).
@@ -36,11 +36,11 @@ Escribir el **código mínimo necesario** para que una prueba unitaria que actua
 
 2. **Determiná qué capa y qué archivo** hay que crear o modificar:
    - **Backend:**
-     - Si la SUT es una regla de negocio → `src/Producto.Bc/`.
-     - Si es un flujo/orquestador → `src/Producto.Bw/`.
+     - Si la SUT es una regla de negocio → `src/Producto.Reglas/`.
+     - Si es un flujo/orquestador → `src/Producto.Flujo/`.
      - Si es un controller → `src/Producto.Api/Controllers/`.
-     - Si es un adaptador a servicio externo → `src/Producto.Sg/`.
-     - Si es acceso a datos → `src/Producto.Da/`.
+     - Si es un adaptador a servicio externo → `src/Producto.Servicios/`.
+     - Si es acceso a datos → `src/Producto.AccesoDatos/`.
      - Las interfaces y DTOs correspondientes van en `src/Producto.Abstracciones/`.
    - **Frontend:** en el feature correspondiente (`src/features/<feature>/hooks/`, `services/`, `components/`, etc.).
 
@@ -50,9 +50,9 @@ Escribir el **código mínimo necesario** para que una prueba unitaria que actua
    - **Sí crea** las interfaces necesarias en `Abstracciones` (backend) para respetar el DIP.
 
 4. **Respetá la arquitectura por capas** (Constitution §3):
-   - `BC` no hace I/O.
+   - `Reglas` no hace I/O.
    - `Api` no contiene lógica de negocio (solo delega).
-   - `DA` no contiene lógica de negocio.
+   - `AccesoDatos` no contiene lógica de negocio.
    - Todas las dependencias apuntan a `Abstracciones`.
 
 5. **Respetá SOLID** (Constitution §6):

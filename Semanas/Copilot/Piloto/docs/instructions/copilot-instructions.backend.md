@@ -22,24 +22,24 @@ Aplicá siempre estos principios. Referencia la Constitution para el detalle.
 ## 2. Arquitectura por capas (Constitution §3)
 Toda solución tiene 6 capas con responsabilidad única:
 
-| Sigla | Capa | Responsabilidad | Prohibido |
-|---|---|---|---|
-| ABS | Abstracciones | Modelos + interfaces | Implementación |
-| API | Controllers | Recibir HTTP, validar shape, delegar | Lógica de negocio |
-| BW | Flujo | Orquestar el caso de uso | — |
-| BC | Reglas | Reglas de negocio puras | I/O, DB, logs |
-| SG | Servicios | Adaptadores a servicios externos | Lógica de negocio |
-| DA | Data Access | Acceso a base de datos | Lógica de negocio |
+| Capa | Responsabilidad | Prohibido |
+|---|---|---|
+| Abstracciones | Modelos + interfaces | Implementación |
+| API | Recibir HTTP, validar shape, delegar | Lógica de negocio |
+| Flujo | Orquestar el caso de uso | — |
+| Reglas | Reglas de negocio puras | I/O, DB, logs |
+| Servicios | Adaptadores a servicios externos | Lógica de negocio |
+| AccesoDatos | Acceso a base de datos | Lógica de negocio |
 
 **Regla de dependencia:** las dependencias apuntan siempre hacia `Abstracciones`. Composición solo en `Api` (composition root único).
 
 ## 3. Reglas duras de codificación
 1. Controllers son *thin translation*: reciben HTTP → invocan Flujo → mapean respuesta.
-2. `BC` es determinística y unit-testeable en aislamiento (sin dependencias externas).
-3. `DA` no contiene lógica de negocio.
+2. `Reglas` es determinística y unit-testeable en aislamiento (sin dependencias externas).
+3. `AccesoDatos` no contiene lógica de negocio.
 4. Cada capa tiene su proyecto de pruebas espejado en `tests/`.
 5. Ninguna capa construye instancias concretas de otra capa — solo la Api vía DI.
-6. Nombres de proyectos: `<Prefijo>.<Producto>.<Capa>` (ej. `Producto.Api`, `Producto.Bw`).
+6. Nombres de proyectos: `<Prefijo>.<Producto>.<Capa>` (ej. `Producto.Api`, `Producto.Flujo`).
 
 ## 4. Nomenclatura (Constitution §5)
 - Clases, métodos, propiedades: PascalCase en **español**.

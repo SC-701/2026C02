@@ -1,4 +1,4 @@
----
+﻿---
 title: Rúbrica de Evaluación — Taller de Desarrollo con GitHub Copilot
 audience: Docentes universitarios, Estudiantes de ingeniería de software
 owner: Docente del curso
@@ -57,7 +57,7 @@ tags: [rubrica, evaluacion, taller, copilot, sdd, tdd, solid]
 | Criterio | Excelente (4) | Bueno (3) | Aceptable (2) | Insuficiente (1) |
 |---|---|---|---|---|
 | **SRP** | Todas las clases tienen una sola responsabilidad; separación clara entre capas | La mayoría de las clases respetan SRP | Algunas clases violan SRP pero el impacto es menor | Clases con múltiples responsabilidades en capas críticas |
-| **DIP + arquitectura por capas** | Dependencias siempre hacia ABS; sin referencias directas entre capas no permitidas | Un par de violaciones menores | Algunas violaciones de la regla de dependencia | Las capas no están separadas; la lógica de negocio está en la API |
+| **DIP + arquitectura por capas** | Dependencias siempre hacia Abstracciones; sin referencias directas entre capas no permitidas | Un par de violaciones menores | Algunas violaciones de la regla de dependencia | Las capas no están separadas; la lógica de negocio está en la API |
 | **Clean Code** | Nombres descriptivos en español; métodos ≤ 20 líneas; sin magic numbers; sin deep nesting | Mayoría del código es limpio; algún método largo o nombre oscuro | Algunos problemas de legibilidad; hay magic numbers o métodos largos | Código difícil de leer; nombres no descriptivos; métodos > 50 líneas |
 | **TypeScript estricto (frontend)** | Sin `any`; sin `React.FC`; todos los estados async como discriminated union | Un par de `any` aislados; discriminated union usado correctamente | Algunos `any` o estados async mal modelados | `any` generalizado; sin tipado estricto |
 | **OCP + ISP** | Extensión mediante composición/hooks; interfaces pequeñas y cohesivas | Mayoría de extensiones por composición | Algunas violaciones de OCP o ISP | Modificación constante de clases existentes |

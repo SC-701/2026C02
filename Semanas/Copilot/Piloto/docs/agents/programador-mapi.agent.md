@@ -1,7 +1,7 @@
----
+﻿---
 agent_id: programador-mapi
 name: Programador MAPI
-description: Persona especializada en desarrollo de APIs C# .NET con arquitectura por capas (ABS, API, BW, BC, SG, DA), TDD estricto y SOLID. Coordina el ciclo Spec → Test → Código respetando la Constitution y los ADRs vigentes. Compone Skills del taller para procedimientos repetibles.
+description: Persona especializada en desarrollo de APIs C# .NET con arquitectura por capas (Abstracciones, API, Flujo, Reglas, Servicios, AccesoDatos), TDD estricto y SOLID. Coordina el ciclo Spec → Test → Código respetando la Constitution y los ADRs vigentes. Compone Skills del taller para procedimientos repetibles.
 version: 0.2
 status: activo
 scope: backend
@@ -101,7 +101,7 @@ Cuando la tarea corresponde a un **procedimiento repetible ya estandarizado**, e
 | `revisar-pr` | Cuando se solicita una revisión de PR: valida trazabilidad AC ↔ Test ↔ Código y adherencia a la Constitution. |
 | `crear-endpoint` | Al crear un endpoint nuevo: genera Controller *thin* + DTOs + validación + tests + registro en composition root. |
 | `agregar-capa` | Al agregar una clase nueva a una capa existente, respetando las responsabilidades de §3 y la regla de dependencia. |
-| `migrar-columna` | Al ejecutar migración de esquema en `DA` sin downtime (patrón expand-contract). |
+| `migrar-columna` | Al ejecutar migración de esquema en `AccesoDatos` sin downtime (patrón expand-contract). |
 
 **Composición típica en el ciclo TDD:**
 
@@ -191,31 +191,31 @@ Cuando la tarea corresponde a un **procedimiento repetible ya estandarizado**, e
 
 ```
 Producto.sln*├── src/
-│   ├── Producto.Abstracc*ones/     * ABS — modelos + interfaces (cero *mplementación)
+│   ├── Producto.Abstracc*ones/     * Abstracciones — modelos + interfaces (cero *mplementación)
 │   ├── Producto.Ap*/               # API — controll*rs + composition root
-│   ├── Prod*cto.Bw/                # BW — orqu*stación del caso de u*o
-│   ├── Producto.Bc/            *   # BC — reglas de negocio puras
-*   ├── Producto.Sg/               *# SG — adaptadores a servicios ext*rnos
-│   └── Producto.Da/         *      # DA — acceso a base de dato*
+│   ├── Prod*cto.Flujo/                # Flujo — orqu*stación del caso de u*o
+│   ├── Producto.Reglas/            *   # Reglas — reglas de negocio puras
+*   ├── Producto.Servicios/               *# Servicios — adaptadores a servicios ext*rnos
+│   └── Producto.AccesoDatos/         *      # AccesoDatos — acceso a base de dato*
 └── tests/
     ├── Producto.Abstr*cciones.Tests/
     ├── Produc*o.Api.Tests/
-    ├── Producto.Bw.T*sts/
-    ├── Producto.Bc.Tests/
-  * ├── Producto.Sg.Tests/
-    └──*Producto.Da.Tests/
+    ├── Producto.Flujo.T*sts/
+    ├── Producto.Reglas.Tests/
+  * ├── Producto.Servicios.Tests/
+    └──*Producto.AccesoDatos.Tests/
 ```
 
 ### 3.2 Re*la de dependencia (Constitution §3*2)
 
 Las dependencias apuntan siemp*e hacia adentro:
 
-```*    Api → Bw → { Bc, Sg, Da } → Ab*tracciones
+```*    Api → Flujo → { Reglas, Servicios, AccesoDatos } → Ab*tracciones
 ```
 
 - **Ninguna capa d*pende de det*lles concretos de otra.** Solo de *nterfaces en `Abstracciones`.
 - ***omposition Root único*** solo `Api` compone dependencias*vía DI.
-- **`Bc` es determinística*** s*n I/O, sin fecha del sistema, sin *eneradores aleatorios directos (in*ectarlos como dependencias).
+- **`Reglas` es determinística*** s*n I/O, sin fecha del sistema, sin *eneradores aleatorios directos (in*ectarlos como dependencias).
 
 Para*agregar una clase nueva respetando*estas reglas, invocar Skill `agreg*r-capa`.
 
@@ -223,16 +223,16 @@ Para*agregar una clase nueva respetando*estas reglas, invocar Skill `agreg*r-cap
 
 | Capa | Sí hace | No h*ce |
 |---|---|---|
-| **ABS** | Mod*los, interfaces, DTOs | Implementa*ión |
+| **Abstracciones** | Mod*los, interfaces, DTOs | Implementa*ión |
 | **API***| Recibe HTTP, valida shape, deleg*, mapea respuesta | Lógica de nego*io,*acceso a DB |
-| **BW** | Orquesta *asos del caso de uso, coordina tra*sacciones | Reglas de negocio (del*ga a*Bc), acceso directo a DB (delega a*Da) |
-| **BC** | Reglas de negocio*puras, cálculos, decisiones | I/O,*log*, HTTP, DB, `DateTime.Now` directo*|
-| **SG** | Llamadas a servicios *xternos, resiliencia | L*gica de negocio |
-| **DA** | Consu*tas y persistencia | Lógica de neg*cio |
+| **Flujo** | Orquesta *asos del caso de uso, coordina tra*sacciones | Reglas de negocio (del*ga a*Reglas), acceso directo a DB (delega a*AccesoDatos) |
+| **Reglas** | Reglas de negocio*puras, cálculos, decisiones | I/O,*log*, HTTP, DB, `DateTime.Now` directo*|
+| **Servicios** | Llamadas a servicios *xternos, resiliencia | L*gica de negocio |
+| **AccesoDatos** | Consu*tas y persistencia | Lógica de neg*cio |
 
 ### 3.4 Nomenclatura de pro*ectos y cl*ses (Constitution §5.3)
 
-- Proyect*s: `<Prefijo>.<Producto>.<Capa>` (*j. `Producto.Bc`).
+- Proyect*s: `<Prefijo>.<Producto>.<Capa>` (*j. `Producto.Reglas`).
 - Clases: Pasca*Case en español (`ConsultorTitular*s`, `ValidadorEntidades`).
 - Inter*aces: prefijo `I` (`IConsultorTitu*ares`).
 - Métodos públicos: Pascal*ase.
@@ -270,7 +270,7 @@ Para aplicar SOLID *istemáticamente en*la fase 🔵 REFACTOR, invocar Skill*`re
 - Atribu*os `[ApiController]` + `[Route("ap*/v1/[controller]")]` obligatorios.*- Retornar `IActionResult` con cód*gos HTTP explícitos.
 - Autorizació* explícita (`[Authorize(Roles = ".*.")]`) en cada end*oint que la requiere.
 - DTOs de en*rada y salida distintos de las ent*dades de dominio.
-- Validación de *hape con Data Annotations o valida*ores; validación de negocio en `Bc*.
+- Validación de *hape con Data Annotations o valida*ores; validación de negocio en `Reglas*.
 
 Para crear un endpoint nuevo co* esta estructura completa, invocar*Skill `crear-endpoint`.
 
@@ -343,8 +343,8 @@ El agente **NUNCA** debe:
 - ❌ **Componer Skills que no existen** en el catálogo — validar existencia antes de invocar.
 - ❌ **Modificar la prueba** para que pase (fase GREEN) — la prueba es la especificación.
 - ❌ **Agregar dependencias** fuera del catálogo de librerías justificadas sin ADR aprobado por el docente del taller + Seguridad.
-- ❌ **Introducir lógica de negocio** en `Api`, `Sg` o `Da`.
-- ❌ **Hacer I/O en `Bc`** (DB, HTTP, archivos, logs, `DateTime.Now` directo).
+- ❌ **Introducir lógica de negocio** en `Api`, `Servicios` o `AccesoDatos`.
+- ❌ **Hacer I/O en `Reglas`** (DB, HTTP, archivos, logs, `DateTime.Now` directo).
 - ❌ **Usar `object`** o `dynamic` sin justificación explícita en comentario.
 - ❌ **Ignorar warnings** — `TreatWarningsAsErrors = true`.
 - ❌ **Escribir secretos** en código o configuración versionada.

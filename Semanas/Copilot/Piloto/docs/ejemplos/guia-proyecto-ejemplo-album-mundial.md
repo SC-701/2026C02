@@ -1,4 +1,4 @@
----
+﻿---
 title: Proyecto ejemplo — Álbum del Mundial (Control de Postales)
 type: walkthrough
 audience: [Desarrolladores, Docentes del taller, Nuevos integrantes]
@@ -76,7 +76,7 @@ Fase 8 · Merge                                        (5 min)
 
 ### 0.1 Crear el repo del backend
 
-En GitHub → **"Use this template"** sobre `Taller.Template.Api`:
+En GitHub → **"Use this template"** sobre `SC-701/Template.API`:
 
 - **Nombre:** `AlbumMundial.Api`
 - Organización: la del taller.
@@ -84,48 +84,51 @@ En GitHub → **"Use this template"** sobre `Taller.Template.Api`:
 
 ### 0.2 Crear el repo del frontend
 
-Análogamente, desde `Taller.Taller.Taller.Taller.Template.Spa`:
+Análogamente, desde `SC-701/Template.SPA`:
 
 - **Nombre:** `AlbumMundial.SPA`
 
-### 0.3 Clonar y verificar
+### 0.3 Clonar los repositorios
 
 ```bash
 # Backend
 git clone <url> AlbumMundial.Api
-cd AlbumMundial.Api
-dotnet restore
-dotnet build
-dotnet test  # verde
 
 # Frontend
 git clone <url> AlbumMundial.SPA
+```
+
+### 0.4 Crear los proyectos del producto
+
+Los templates tienen `src/` vacío. El alumno crea sus proyectos con el nombre de su dominio:
+
+```bash
+# Backend — crear solución y capas en src/
+cd AlbumMundial.Api
+dotnet new sln -n AlbumMundial
+dotnet new classlib -n AlbumMundial.Abstracciones -o src/AlbumMundial.Abstracciones -f net8.0
+dotnet new classlib -n AlbumMundial.Flujo            -o src/AlbumMundial.Flujo            -f net8.0
+dotnet new classlib -n AlbumMundial.Reglas            -o src/AlbumMundial.Reglas            -f net8.0
+dotnet new classlib -n AlbumMundial.Servicios            -o src/AlbumMundial.Servicios            -f net8.0
+dotnet new classlib -n AlbumMundial.AccesoDatos            -o src/AlbumMundial.AccesoDatos            -f net8.0
+dotnet new webapi   -n AlbumMundial.Api           -o src/AlbumMundial.Api           -f net8.0 --use-controllers
+dotnet sln add src/**/*.csproj
+```
+
+```bash
+# Frontend — iniciar el proyecto Vite en src/
 cd AlbumMundial.SPA
-npm ci
-npm run test  # verde
+npm create vite@latest . -- --template react-ts
 ```
 
-### 0.4 Renombrar proyectos backend
-
-El template trae proyectos con nombre genérico. Renombrar:
+Verificar que compilan:
 
 ```bash
-cd src
-mv Producto.Abstracciones AlbumMundial.Abstracciones
-mv Producto.Api           AlbumMundial.Api
-mv Producto.Bw            AlbumMundial.Bw
-mv Producto.Bc            AlbumMundial.Bc
-mv Producto.Sg            AlbumMundial.Sg
-mv Producto.Da            AlbumMundial.Da
-# Idem para tests/
-# Actualizar Producto.sln → AlbumMundial.sln
-# Actualizar cada .csproj y namespaces
-```
+# Backend
+cd AlbumMundial.Api && dotnet restore && dotnet build
 
-Y el frontend:
-
-```bash
-# package.json → "name": "album-mundial-spa"
+# Frontend
+cd AlbumMundial.SPA && npm ci && npm run build
 ```
 
 ### 0.5 Verificar personalización de Copilot
@@ -136,15 +139,21 @@ Confirmar que cada repo tiene:
 .github/
   ├── copilot-instructions.md      ← reglas activas
   ├── instructions/                ← path-specific
-  ├── prompts/                     ← 5 prompts críticos
-  ├── agents/                      ← programador-mapi (o -spa-react)
-  ├── skills/                      ← 4 skills críticos
+  ├── prompts/                     ← 6 prompts críticos
+  ├── agents/                      ← programador-mapi, programador-spa-react, analista-requisitos
+  ├── skills/                      ← 5 skills críticos
   └── workflows/                   ← 5 workflows agentic + CI + SCA
 .specify/memory/constitution.md    ← ley suprema
+docs/
+  ├── templates/
+  ├── adr/
+  ├── stories/
+  └── use-cases/
+src/                               ← vacío; el alumno crea sus proyectos aquí (paso 0.4)
 ```
 
-**Backend commit:** `chore: bootstrap AlbumMundial.Api desde Taller.Template.Api`
-**Frontend commit:** `chore: bootstrap AlbumMundial.SPA desde Taller.Taller.Taller.Taller.Template.Spa`
+**Backend commit:** `chore: bootstrap AlbumMundial.Api desde SC-701/Template.API`
+**Frontend commit:** `chore: bootstrap AlbumMundial.SPA desde SC-701/Template.SPA`
 
 ---
 
@@ -241,17 +250,48 @@ catálogo; solo endpoint de lectura.
 
 ## Fase 2 · Historia US-001
 
-Crear `docs/stories/US-001-registrar-postal-poseida.md` usando el template:
+### 2.1 Generar la US con Copilot
+
+Con el agente `analista-requisitos` activo en VS Code:
+
+```
+@analista-requisitos
+/generar-historia-de-usuario
+```
+
+Copilot te pedirá los parámetros. Respondé:
+
+- **nombreUS:** `registrar-postal-poseida`
+- **epicFeature:** `Gestión de colección`
+- **actor:** `Coleccionista`
+- **capacidad:** `Registrar una postal que acabo de conseguir`
+- **beneficio:** `Llevar el control preciso de mi colección`
+- **contexto:** `El catálogo es fijo (1..670 postales, ADR-004). Registrar dos veces la misma postal la marca como repetida.`
+
+Copilot generará `docs/stories/US-001-registrar-postal-poseida.md` con las **10 secciones** del template e invocará el skill `validar-us` automáticamente al finalizar. Salida esperada:
+
+```
+Decisión: Lista.
+Criterios INVEST: 6/6 marcados.
+Criterios de aceptación de alto nivel: 4 criterios observables.
+Sin placeholders sin resolver.
+```
+
+El archivo generado `docs/stories/US-001-registrar-postal-poseida.md`:
 
 ```markdown
 ---
 id: US-001
 title: Registrar una postal en mi colección
 status: refinada
+owner: Por definir
 size: S
 priority: alta
 related_uc: [UC-001]
+related_epic: Gestión de colección
 tags: [coleccion, registro]
+version: 0.1
+last-reviewed: 2026-07-12
 ---
 
 # US-001 · Registrar una postal en mi colección
@@ -259,25 +299,53 @@ tags: [coleccion, registro]
 ## 1. Historia de usuario
 **Como** coleccionista
 **Quiero** registrar una postal que acabo de conseguir
-**Con**l fin de** llevar el control preciso de mi colección
+**Con el fin de** llevar el control preciso de mi colección
 
 ## 2. Valor de negocio
-Es la acción más frecuente del usuario. Sin ella, ninguna otra
-funcionalidad tiene sentido.
+- Es la acción más frecuente del usuario; sin ella ninguna otra funcionalidad tiene sentido.
+- Permite detectar postales repetidas en tiempo real, habilitando el flujo de intercambio.
 
 ## 3. Criterios INVEST
-- [x] Independiente
-- [x] Negociable
-- [x] Valiosa
-- [x] Estimable
-- [x] Small
-- [x] Testable
+- [x] **Independiente** — no depende del orden con otra historia.
+- [x] **Negociable** — el mecanismo exacto de duplicidad puede discutirse.
+- [x] **Valiosa** — base de toda la funcionalidad del álbum.
+- [x] **Estimable** — el equipo puede estimarla en una sesión.
+- [x] **Small** — cabe en una iteración.
+- [x] **Testable** — se puede validar con número, estado y cantidad.
 
 ## 4. Criterios de aceptación de alto nivel
-- [x] Puedo registrar una postal por su número (1..670).
-- [x] Si ya la tengo, el sistema me avisa (podría ser repetida).
-- [x] Recibo confirmación inmediata.
-- [x] La postal registrada se refleja en las consultas posteriores.
+- [ ] Puedo registrar una postal por su número (1..670).
+- [ ] Si ya la tengo, el sistema me indica que es repetida y actualiza la cantidad.
+- [ ] Recibo confirmación inmediata con el estado actual de la postal.
+- [ ] La postal registrada se refleja en las consultas posteriores.
+
+## 5. Casos de uso asociados
+
+| ID | Título | Estado |
+|---|---|---|
+| UC-001 | Registrar postal poseída | sugerido |
+
+## 6. Restricciones y supuestos
+- El catálogo de postales es inmutable (ADR-004); el número debe existir en el seed.
+- La autenticación es obligatoria; un coleccionista solo gestiona su propia colección.
+
+## 7. Fuera de alcance
+- Registro masivo (carga de un lote de postales de una sola vez).
+- Edición o eliminación de una postal ya registrada.
+
+## 8. Dependencias
+- **Depende de:** catálogo de postales cargado como seed (ADR-004).
+- **Es dependencia de:** US-002 (Marcar postal como repetida), US-003 (Consultar faltantes).
+
+## 9. Notas de refinamiento
+- ¿El número máximo de postales es 670 fijo o varía por edición del mundial?
+- ¿Debe emitirse un evento de dominio `PostalRegistrada`? (impacta AC-01 del UC-001).
+
+## 10. Historial
+
+| Versión | Fecha | Autor | Cambios |
+|---|---|---|---|
+| 0.1 | 2026-07-12 | Por definir | Versión inicial |
 ```
 
 **Commit backend:** `docs: agregar US-001 registrar postal poseída`.
@@ -383,19 +451,19 @@ Parámetros:
 - **acId:** `AC-01`
 - **stack:** `backend`
 - **sut:** `RegistradorPostales.Registre`
-- **ubicacion:** `Bc`
+- **ubicacion:** `Reglas`
 
-Copilot genera `tests/AlbumMundial.Bc.Tests/RegistradorPostalesTests.cs`:
+Copilot genera `tests/AlbumMundial.Reglas.Tests/RegistradorPostalesTests.cs`:
 
 ```csharp
 using AlbumMundial.Abstracciones.Interfaces;
 using AlbumMundial.Abstracciones.Modelos;
-using AlbumMundial.Bc;
+using AlbumMundial.Reglas;
 using FluentAssertions;
 using NSubstitute;
 using Xunit;
 
-namespace AlbumMundial.Bc.Tests;
+namespace AlbumMundial.Reglas.Tests;
 
 public class RegistradorPostalesTests
 {
@@ -444,10 +512,10 @@ dotnet test --filter "FullyQualifiedName~Registre_ConPostalDelCatalogoYSinPoseer
 ```
 
 Parámetros:
-- **archivoPrueba:** `tests/AlbumMundial.Bc.Tests/RegistradorPostalesTests.cs`
+- **archivoPrueba:** `tests/AlbumMundial.Reglas.Tests/RegistradorPostalesTests.cs`
 - **nombreTest:** `Registre_ConPostalDelCatalogoYSinPoseerla_RetornaRegistroPoseida`
 - **stack:** `backend`
-- **ubicacion:** `Bc`
+- **ubicacion:** `Reglas`
 
 El agent crea archivos en las capas correctas:
 
@@ -499,13 +567,13 @@ public interface IColeccionesDa
 }
 ```
 
-**`src/AlbumMundial.Bc/RegistradorPostales.cs`**
+**`src/AlbumMundial.Reglas/RegistradorPostales.cs`**
 
 ```csharp
 using AlbumMundial.Abstracciones.Interfaces;
 using AlbumMundial.Abstracciones.Modelos;
 
-namespace AlbumMundial.Bc;
+namespace AlbumMundial.Reglas;
 
 public class RegistradorPostales(ICatalogoDa catalogo, IColeccionesDa colecciones)
 {
@@ -535,7 +603,7 @@ dotnet test
 ### 4.4 🔵 REFACTOR — SOLID + Clean Code
 
 ```
-@programador-mapi invocá el skill refactor-solid sobre src/AlbumMundial.Bc/RegistradorPostales.cs
+@programador-mapi invocá el skill refactor-solid sobre src/AlbumMundial.Reglas/RegistradorPostales.cs
 ```
 
 En este caso el código ya cumple SOLID (SRP claro, dependencias hacia `Abstracciones`, sin números mágicos, métodos cortos). El skill reportará ✅ en los 5 principios.
@@ -577,12 +645,12 @@ public async Task Registre_ConNumeroFueraDelCatalogo_LanzaExcepcionValidacion()
 **Código (GREEN):**
 
 - Agregar `PostalFueraDeRangoException` en `Abstracciones/Excepciones/`.
-- Constante `NUMERO_MAXIMO_POSTAL = 670` en `Bc/Constantes.cs`.
+- Constante `NUMERO_MAXIMO_POSTAL = 670` en `Reglas/Constantes.cs`.
 - Validación al inicio del método `Registre`.
 
 ### 5.2 AC-03 · Autenticación (capa API)
 
-El AC-03 es responsabilidad del **controller**, no del `Bc`. Movemos el test a `AlbumMundial.Api.Tests/PostalesControllerTests.cs`.
+El AC-03 es responsabilidad del **controller**, no del `Reglas`. Movemos el test a `AlbumMundial.Api.Tests/PostalesControllerTests.cs`.
 
 **Test:**
 
@@ -613,17 +681,17 @@ public async Task Post_SinToken_Retorna401()
 
 ### 5.3 AC-04 · Postal no existe
 
-Test en `Bc` con `catalogo.Existe(500).Returns(false)` → lanza `PostalNoExisteException` → mapeada a 404 en el controller.
+Test en `Reglas` con `catalogo.Existe(500).Returns(false)` → lanza `PostalNoExisteException` → mapeada a 404 en el controller.
 
 ### 5.4 AC-05 · Idempotencia → repetida
 
-Test en `Bc` con `colecciones.ObtengaPostal(...)` retornando una postal existente con cantidad 1. El resultado tiene cantidad 2 y estado `Repetida`.
+Test en `Reglas` con `colecciones.ObtengaPostal(...)` retornando una postal existente con cantidad 1. El resultado tiene cantidad 2 y estado `Repetida`.
 
 ### 5.5 AC-06 · Fallo de dependencia externa
 
-Test en `Bc` con `colecciones.Guarde(...)` lanzando `TimeoutException` → el flujo (`Bw`) la mapea a `ServicioNoDisponibleException` → controller responde 503.
+Test en `Reglas` con `colecciones.Guarde(...)` lanzando `TimeoutException` → el flujo (`Flujo`) la mapea a `ServicioNoDisponibleException` → controller responde 503.
 
-Aquí introducimos la capa **BW** por primera vez: `RegistroPostalesFlujo` en `AlbumMundial.Bw/` orquesta y mapea excepciones.
+Aquí introducimos la capa **Flujo** por primera vez: `RegistroPostalesFlujo` en `AlbumMundial.Flujo/` orquesta y mapea excepciones.
 
 ### 5.6 Estructura final del backend
 
@@ -636,13 +704,13 @@ src/
 ├── AlbumMundial.Api/
 │   ├── Controllers/       PostalesController.cs
 │   └── Program.cs         (composition root)
-├── AlbumMundial.Bw/
+├── AlbumMundial.Flujo/
 │   └── RegistroPostalesFlujo.cs
-├── AlbumMundial.Bc/
+├── AlbumMundial.Reglas/
 │   ├── RegistradorPostales.cs
 │   └── Constantes.cs
-├── AlbumMundial.Sg/       (vacío por ahora)
-└── AlbumMundial.Da/
+├── AlbumMundial.Servicios/       (vacío por ahora)
+└── AlbumMundial.AccesoDatos/
     ├── CatalogoDa.cs
     └── ColeccionesDa.cs
 ```
@@ -1016,7 +1084,7 @@ Sin dependencias nuevas fuera del catálogo de librerías justificadas.
 ```
 Decisión: Aprobado
 Regla de Dependencia respetada.
-Bc puro (sin I/O directo).
+Reglas puro (sin I/O directo).
 Controllers thin.
 ```
 
@@ -1043,7 +1111,7 @@ Con el reporte consolidado como punto de partida, el reviewer:
 
 1. Confirma que la trazabilidad AC ↔ Test ↔ Código es correcta al menos por muestreo.
 2. Verifica lógica de negocio en `RegistradorPostales` y `RegistroPostalesFlujo`.
-3. Da su ✅.
+3. AccesoDatos su ✅.
 
 ### 7.4 Frontend igual
 
@@ -1108,13 +1176,13 @@ Aplicando el mismo patrón, extendé el proyecto con:
 | ADR-001..ADR-Frontend-002 | Sostuvo la arquitectura y política de dependencias |
 | ADR-004 (nuevo, propio del proyecto) | Decisión de dominio (catálogo como semilla) |
 | Documento maestro §5 (docs previos) | Definió qué documentar antes de codear |
-| Repository Templates | Bootstrap de los 2 repos (`Taller.Template.Api`, `Taller.Taller.Taller.Taller.Template.Spa`) |
+| Repository Templates | Bootstrap de los 2 repos (`SC-701/Template.API`, `SC-701/Template.SPA`) |
 | Content Templates | US, UC, ADR, README, PR |
 | `copilot-instructions.md` | Guió a Copilot en cada request |
-| Instructions path-specific | Reglas por capa (Api, Bc, Da, tests) |
-| Prompts (5) | `/generar-caso-de-uso`, `/generar-prueba-desde-ac`, `/implementar-para-pasar-prueba`, `/generar-componente-funcional`, `/generar-custom-hook` |
-| Agents (2) | `@programador-mapi` (backend), `@programador-spa-react` (frontend) |
-| Skills (4) | `validar-uc`, `refactor-solid`, `analisis-cobertura`, `revisar-pr` |
+| Instructions path-specific | Reglas por capa (Api, Reglas, AccesoDatos, tests) |
+| Prompts (6) | `/generar-historia-de-usuario`, `/generar-caso-de-uso`, `/generar-prueba-desde-ac`, `/implementar-para-pasar-prueba`, `/generar-componente-funcional`, `/generar-custom-hook` |
+| Agents (3) | `@analista-requisitos` (requisitos), `@programador-mapi` (backend), `@programador-spa-react` (frontend) |
+| Skills (5) | `validar-us`, `validar-uc`, `refactor-solid`, `analisis-cobertura`, `revisar-pr` |
 | Workflows agentic (5) | Reportes automáticos en el PR |
 
 **El único artefacto no ejercitado fue MCP** — porque este dominio no requirió conexión a sistemas externos. Cuando se ejercite (por ejemplo, para consultar el catálogo Panini oficial), pasará por el catálogo autorizado de MCPs.

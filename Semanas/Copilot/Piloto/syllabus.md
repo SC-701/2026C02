@@ -1,4 +1,4 @@
----
+﻿---
 title: Syllabus — Taller de Desarrollo con GitHub Copilot
 audience: Docentes universitarios, Estudiantes de ingeniería de software
 owner: Docente del curso
@@ -43,7 +43,7 @@ Al finalizar el taller, el estudiante será capaz de:
 
 1. Redactar casos de uso y criterios de aceptación en formato GWT verificables y trazables.
 2. Aplicar el ciclo TDD (Red-Green-Refactor) con disciplina y consistencia.
-3. Diseñar backends C# .NET con arquitectura por capas (ABS/API/BW/BC/SG/DA) respetando la regla de dependencia.
+3. Diseñar backends C# .NET con arquitectura por capas (Abstracciones/API/Flujo/Reglas/Servicios/AccesoDatos) respetando la regla de dependencia.
 4. Construir SPAs React con TypeScript estricto, sin paquetes OSS injustificados.
 5. Configurar los 8 elementos de personalización de GitHub Copilot (Instructions, Prompts, Agents, Skills, MCP, Workflows, Templates, Documentación).
 6. Documentar decisiones arquitectónicas mediante ADRs.
@@ -81,7 +81,7 @@ Al finalizar el taller, el estudiante será capaz de:
 
 - Flujo obligatorio: UC → AC → 🔴 RED → 🟢 GREEN → 🔵 REFACTOR.
 - Relación 1:1 AC ↔ Prueba ↔ Unidad de código.
-- Arquitectura por capas (ABS, API, BW, BC, SG, DA).
+- Arquitectura por capas (Abstracciones, API, Flujo, Reglas, Servicios, AccesoDatos).
 - Regla de dependencia (Robert C. Martin).
 - Checklist SOLID pre-commit.
 - Política de dependencias: ADR obligatorio para toda librería OSS.

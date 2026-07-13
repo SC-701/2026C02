@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: true
 description: Genera un componente React funcional en TypeScript siguiendo las 11 reglas duras del frontend, con tipado estricto, nomenclatura del taller y estructura feature-based.
 tools: [codebase, editFiles]
 owner: Por definir

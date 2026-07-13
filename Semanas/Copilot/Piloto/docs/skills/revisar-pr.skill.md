@@ -1,4 +1,4 @@
----
+﻿---
 id: revisar-pr
 name:*Revisar PR
 description: Revisa un *ull Request cont*a la Constitution y los ADRs vigen*es, valida trazabilidad AC ↔ Test * Código* compone otros Skills (validar-uc,*analisis-cobertura) y produce un r*porte estructurado para el revisor*humano.
@@ -124,9 +124,9 @@ Realizar una ***evisión asistida y estructurada** *e un Pull Request contra la 
 Decisión sugerida: Solicitar*cambios.
 
 Observaciones altas:
-- s*c/Producto.Bc/ConsultorTitulares.c*:42 → método `Consulte` de 34 líne*s
+- s*c/Producto.Reglas/ConsultorTitulares.c*:42 → método `Consulte` de 34 líne*s
   (§7.3 métodos ≤ 20 líneas). Ex*raer helper `AgrupePorEntidad`.
-- *ests/Producto.Bc.T*sts/ConsultorTitularesTests.cs → f*lta cobertura de AC-03
+- *ests/Producto.Reglas.T*sts/ConsultorTitularesTests.cs → f*lta cobertura de AC-03
   (aut*nticación). Agregar `Consulte_SinR*lSupervisor_Retorna403`.
 
 Observac*ones medias:

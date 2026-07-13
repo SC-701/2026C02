@@ -121,14 +121,14 @@ Decisión sugerida: **<Aprobar | Solicitar cambios | Bloquear>**
 | UC | ✅ | Válido (ver reporte de validar-uc) |
 | Cobertura | ⚠️ | Rama 71% < 75% umbral |
 | Dependencias | ✅ | Sin nuevas fuera del catálogo |
-| Arquitectura | ❌ | Bc con DateTime.Now directo (§3.6) |
+| Arquitectura | ❌ | Reglas con DateTime.Now directo (§3.6) |
 | SOLID / Clean Code | ⚠️ | 2 métodos > 20 líneas |
 | Seguridad | ✅ | Sin secretos, entradas validadas |
 | Commits | ✅ | Conventional Commits OK |
 | CI | ✅ | Verde |
 
 ### Observaciones críticas
-- `src/Producto.Bc/ConsultorTitulares.cs:42` — `DateTime.Now` directo. Ver Constitution §3.6.
+- `src/Producto.Reglas/ConsultorTitulares.cs:42` — `DateTime.Now` directo. Ver Constitution §3.6.
 
 ### Observaciones altas
 - Cobertura de rama por debajo del umbral. Ver reporte de validar-cobertura.

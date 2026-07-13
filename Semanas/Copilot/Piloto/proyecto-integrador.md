@@ -1,4 +1,4 @@
----
+﻿---
 title: Proyecto Integrador — Taller de Desarrollo con GitHub Copilot
 audience: Docentes universitarios, Estudiantes de ingeniería de software
 owner: Docente del curso
@@ -28,16 +28,7 @@ El proyecto de referencia es el **Álbum del Mundial** — un sistema para regis
 
 ## 2. Dominios alternativos
 
-Si el docente o el equipo prefieren otro dominio, se puede usar cualquiera de los siguientes. Todos cumplen los requisitos de complejidad mínima:
-
-| Dominio | Descripción breve |
-|---|---|
-| **Biblioteca del curso** | Gestión de préstamos de libros entre estudiantes |
-| **Reserva de laboratorios** | Sistema para reservar salas y equipos de un laboratorio |
-| **Gestor de proyectos estudiantiles** | Seguimiento de avances y entregas de proyectos académicos |
-| **Foro de dudas del curso** | Sistema de preguntas y respuestas entre estudiantes |
-| **Gestor de tareas del equipo** | To-do list colaborativo con prioridades y asignación |
-| **Álbum de fotos de graduación** | Sistema para compartir y organizar fotos de un evento |
+No aplica
 
 ---
 
@@ -101,17 +92,17 @@ AlbumMundial.sln
 ├── src/
 │   ├── AlbumMundial.Abstracciones/   ← interfaces + modelos
 │   ├── AlbumMundial.Api/             ← controllers HTTP
-│   ├── AlbumMundial.Bw/              ← flujo / orquestación del UC
-│   ├── AlbumMundial.Bc/              ← reglas de negocio puras
-│   ├── AlbumMundial.Sg/              ← servicios externos (si aplica)
-│   └── AlbumMundial.Da/              ← acceso a datos
+│   ├── AlbumMundial.Flujo/              ← flujo / orquestación del UC
+│   ├── AlbumMundial.Reglas/              ← reglas de negocio puras
+│   ├── AlbumMundial.Servicios/              ← servicios externos (si aplica)
+│   └── AlbumMundial.AccesoDatos/              ← acceso a datos
 └── tests/
-    ├── AlbumMundial.Bw.Tests/
-    ├── AlbumMundial.Bc.Tests/
-    └── AlbumMundial.Da.Tests/
+    ├── AlbumMundial.Flujo.Tests/
+    ├── AlbumMundial.Reglas.Tests/
+    └── AlbumMundial.AccesoDatos.Tests/
 ```
 
-**Regla:** la lógica de negocio (porcentaje de completitud, validación de duplicados) vive en `AlbumMundial.Bc`, no en la API ni en el flujo.
+**Regla:** la lógica de negocio (porcentaje de completitud, validación de duplicados) vive en `AlbumMundial.Reglas`, no en la API ni en el flujo.
 
 ### 4.2 Frontend — React 18 + TypeScript
 

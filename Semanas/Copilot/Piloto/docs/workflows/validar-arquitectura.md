@@ -36,7 +36,7 @@ Detectar automáticamente violaciones a la Regla de Dependencia y a las responsa
 Trigger (PR sobre src/**)
         ↓
 Identificar proyectos afectados y su capa por sufijo del csproj
-    (.Abstracciones, .Api, .Bw, .Bc, .Sg, .Da)
+    (.Abstracciones, .Api, .Flujo, .Reglas, .Servicios, .AccesoDatos)
         ↓
 Analizar dependencias declaradas en cada .csproj
         ↓
@@ -45,9 +45,9 @@ Verificar Regla de Dependencia (Constitution §3.2):
     - Composition Root único (solo Api compone).
         ↓
 Analizar imports/usos por archivo modificado:
-    - Bc no hace I/O (sin using de System.IO, HttpClient, DateTime.Now directo, logs).
+    - Reglas no hace I/O (sin using de System.IO, HttpClient, DateTime.Now directo, logs).
     - Api no contiene lógica de negocio (controllers thin).
-    - Da no contiene lógica de negocio.
+    - AccesoDatos no contiene lógica de negocio.
         ↓
 Consolidar violaciones detectadas
         ↓
@@ -64,12 +64,12 @@ Extraer del `.csproj` las referencias entre proyectos. Validar que:
 
 | Capa | Puede depender de |
 |---|---|
-| ABS | — (nadie) |
-| API | ABS, BW |
-| BW | ABS, BC, SG, DA |
-| BC | ABS |
-| SG | ABS |
-| DA | ABS |
+| Abstracciones | — (nadie) |
+| API | Abstracciones, Flujo |
+| Flujo | Abstracciones, Reglas, Servicios, AccesoDatos |
+| Reglas | Abstracciones |
+| Servicios | Abstracciones |
+| AccesoDatos | Abstracciones |
 
 Cualquier dependencia fuera de esta tabla es **violación crítica**.
 
@@ -77,9 +77,9 @@ Cualquier dependencia fuera de esta tabla es **violación crítica**.
 
 Buscar registraciones DI (`AddScoped`, `AddSingleton`, `AddTransient`) fuera de `Api/`. **Violación alta** si aparecen en otras capas.
 
-### 5.3 Bc puro (§3.6)
+### 5.3 Reglas puro (§3.6)
 
-En archivos bajo `src/**/*.Bc/**/*.cs`, detectar:
+En archivos bajo `src/**/*.Reglas/**/*.cs`, detectar:
 - `System.IO`, `File.*`
 - `HttpClient`, `HttpRequest`
 - `DateTime.Now`, `DateTime.UtcNow`, `Guid.NewGuid()` directos
@@ -92,16 +92,16 @@ Cada uno es **violación crítica** del principio "reglas de negocio puras".
 
 En `src/**/*.Api/Controllers/*.cs`, detectar:
 - Cuerpos de método con más de ~15 líneas.
-- Referencias directas a `.Da` desde el controller (debe pasar por `.Bw`).
+- Referencias directas a `.AccesoDatos` desde el controller (debe pasar por `.Flujo`).
 - Lógica condicional compleja (sin ifs anidados de negocio).
 
 **Violación alta** si se detectan.
 
-### 5.5 Da sin lógica (§3 tabla)
+### 5.5 AccesoDatos sin lógica (§3 tabla)
 
-En `src/**/*.Da/**/*.cs`, detectar:
+En `src/**/*.AccesoDatos/**/*.cs`, detectar:
 - Reglas de negocio (cálculos, validaciones complejas).
-- Referencias a `.Bc` (Da no consume Bc).
+- Referencias a `.Reglas` (AccesoDatos no consume Reglas).
 
 **Violación alta.**
 
@@ -116,13 +116,13 @@ Decisión: **<Aprobado | Requiere ajustes | Bloquea PR>**
 
 | Severidad | Archivo | Línea | Regla | Recomendación |
 |---|---|---|---|---|
-| Crítica | src/Producto.Bc/ConsultorTitulares.cs | 42 | §3.6 (Bc puro) | Reemplazar `DateTime.Now` por dependencia inyectada `IReloj`. |
-| Alta | src/Producto.Api/Controllers/TitularesController.cs | 28 | §3.5 (Controllers thin) | Método de 34 líneas. Mover orquestación a `Bw`. |
-| Alta | src/Producto.Bw/Producto.Bw.csproj | — | §3.2 (Regla de Dependencia) | Referencia inválida a `Producto.Api`. Bw no debe conocer Api. |
+| Crítica | src/Producto.Reglas/ConsultorTitulares.cs | 42 | §3.6 (Reglas puro) | Reemplazar `DateTime.Now` por dependencia inyectada `IReloj`. |
+| Alta | src/Producto.Api/Controllers/TitularesController.cs | 28 | §3.5 (Controllers thin) | Método de 34 líneas. Mover orquestación a `Flujo`. |
+| Alta | src/Producto.Flujo/Producto.Flujo.csproj | — | §3.2 (Regla de Dependencia) | Referencia inválida a `Producto.Api`. Flujo no debe conocer Api. |
 
 ### Regla de Dependencia — mapa actual
-✅ Api → Bw → { Bc, Sg, Da } → ABS
-❌ Bw → Api (violación detectada)
+✅ Api → Flujo → { Reglas, Servicios, AccesoDatos } → Abstracciones
+❌ Flujo → Api (violación detectada)
 
 > Este reporte es informativo. La revisión humana es obligatoria.
 ```

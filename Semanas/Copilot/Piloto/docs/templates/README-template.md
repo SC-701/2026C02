@@ -1,4 +1,4 @@
-# <Nombre del repositorio / producto>
+﻿# <Nombre del repositorio / producto>
 
 > *Frase corta que describe el propósito del repositorio.*
 
@@ -105,7 +105,7 @@ Consultar el catálogo de prompts y agentes en cademia/docs/ del taller.
 
 ## 🏛️ Arquitectura
 
-*Referencia breve al enfoque arquitectónico (ej. capas ABS/API/BW/BC/SG/DA para backend, o feature-based para SPA), con enlace al documento de arquitectura completo.*
+*Referencia breve al enfoque arquitectónico (ej. capas Abstracciones/API/Flujo/Reglas/Servicios/AccesoDatos para backend, o feature-based para SPA), con enlace al documento de arquitectura completo.*
 
 Ver `docs/architecture/README.md` para el detalle.
 

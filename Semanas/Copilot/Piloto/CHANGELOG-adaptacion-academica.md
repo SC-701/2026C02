@@ -1,6 +1,23 @@
-# CHANGELOG — Adaptación a Contexto Académico
+﻿# CHANGELOG — Adaptación a Contexto Académico
 
 **Taller de Desarrollo con GitHub Copilot** · Adaptación: 2026-07-06
+
+---
+
+## [2026-07-12] — Publicación de repos plantilla en SC-701
+
+**Cambio:** Los repositorios plantilla locales `Taller.Template.Api` y `Taller.Template.Spa` fueron reemplazados por repos reales en la organización GitHub del curso:
+
+- `Taller.Template.Api` → [`SC-701/Template.API`](https://github.com/SC-701/Template.API)
+- `Taller.Template.Spa` → [`SC-701/Template.SPA`](https://github.com/SC-701/Template.SPA)
+
+Ambos repos tienen `src/` vacío — el alumno crea sus proyectos desde cero al clonar.
+
+**Archivos actualizados:**
+- `docs/adr/ADR-001-polirrepo.md` — referencias a los templates en §3.1
+- `docs/ejemplos/guia-proyecto-ejemplo-album-mundial.md` — §0.1, §0.2, commits de bootstrap y tabla de resumen
+- `scripts/New-TallerTemplateApi.ps1` — nombre de repo destino y comando `gh repo create`
+- `scripts/New-TallerTemplateSpa.ps1` — nombre de repo destino y comando `gh repo create`
 
 ---
 
@@ -136,7 +153,7 @@ Los siguientes archivos son **nuevos** y no existían en el repositorio original
 - [x] Ciclo 🔴 RED → 🟢 GREEN → 🔵 REFACTOR intacto
 - [x] Relación 1:1 AC ↔ Prueba ↔ Código intacta
 - [x] 6 escenarios mínimos por UC intactos
-- [x] 6 capas del backend (ABS, API, BW, BC, SG, DA) intactas
+- [x] 6 capas del backend (Abstracciones, API, Flujo, Reglas, Servicios, AccesoDatos) intactas
 - [x] 11 reglas duras del frontend intactas (adaptadas para contexto open-source)
 - [x] SOLID + Clean Code intactos
 - [x] Estructura 9 secciones de un Skill intacta

@@ -1,5 +1,5 @@
----
-mode: agent
+﻿---
+agent: true
 description: Fase RED del ciclo TDD. Genera la prueba unitaria que falla desde un criterio de aceptación (AC) en formato GWT, siguiendo nomenclatura y estructura AAA.
 tools: [codebase, editFiles]
 owner: Por definir
@@ -19,7 +19,7 @@ Crear una prueba unitaria **que falla** derivada directamente de un criterio de 
 - **Criterio de aceptación:** `${input:acId:ID del AC, ej. AC-01}`
 - **Stack objetivo:** `${input:stack:backend|frontend}`
 - **Unidad bajo prueba (SUT):** `${input:sut:Método, clase, componente o hook a probar}`
-- **Capa (backend) o feature (frontend):** `${input:ubicacion:Ej. Bc, Bw, Api o features/titulares}`
+- **Capa (backend) o feature (frontend):** `${input:ubicacion:Ej. Reglas, Flujo, Api o features/titulares}`
 
 ## Contexto obligatorio a considerar
 - El archivo `docs/use-cases/${input:ucId}*.md` — leé el AC `${input:acId}` textualmente.

@@ -1,4 +1,4 @@
-<!--
+﻿<!--
 Plantilla de Pull Request — Taller
 No borrar las secciones. Marcar N/A si no aplica.
 -->
@@ -74,8 +74,8 @@ No borrar las secciones. Marcar N/A si no aplica.
 ## 🖥️ Backend (si aplica)
 
 - [ ] Controllers son *thin translation* (sin lógica de negocio).
-- [ ] La lógica de negocio vive en `Bc` / `Bw`.
-- [ ] `Da` no contiene lógica de negocio.
+- [ ] La lógica de negocio vive en `Reglas` / `Flujo`.
+- [ ] `AccesoDatos` no contiene lógica de negocio.
 - [ ] Dependencias apuntan a `Abstracciones`; composición solo en `Api`.
 - [ ] Cada capa tiene su proyecto de pruebas.
 

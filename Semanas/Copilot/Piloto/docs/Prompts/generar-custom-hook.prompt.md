@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: true
 description: Genera un custom hook de React en TypeScript con nomenclatura kebab-case, tipado estricto, discriminated union para estados asíncronos y respetando las reglas duras del frontend.
 tools: [codebase, editFiles]
 owner: Por definir

@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: true
 description: Genera un caso de uso completo (UC) con criterios de aceptación en formato GWT, siguiendo la plantilla del taller y cubriendo los 6 escenarios mínimos obligatorios.
 tools: [codebase, editFiles]
 owner: Por definir
