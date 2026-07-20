@@ -1,0 +1,271 @@
+{
+  "info": {
+    "_postman_id": "f3d2f4c1-4c7a-4b5d-bd2b-8f5f0f5f8d01",
+    "name": "Seguridad API",
+    "description": "Coleccion para probar los endpoints del proyecto Seguridad.API. Usa una variable accessToken obtenida desde el login y permite encadenar el idUsuario devuelto al registrar un usuario.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Autenticacion",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombreUsuario\": \"{{nombreUsuario}}\",\n  \"passwordHash\": \"{{passwordHash}}\",\n  \"correoElectronico\": \"{{correoElectronico}}\"\n}"
+            },
+            "url": {
+              "raw": "https://localhost:7253/api/Autenticacion/login",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7253",
+              "path": [
+                "api",
+                "Autenticacion",
+                "login"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Login responde 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Login valida exitosamente', function () {",
+                  "  pm.expect(response).to.have.property('validacionExitosa', true);",
+                  "  pm.expect(response).to.have.property('accessToken');",
+                  "});",
+                  "",
+                  "if (response.accessToken) {",
+                  "  pm.collectionVariables.set('accessToken', response.accessToken);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Usuarios",
+      "item": [
+        {
+          "name": "Registrar usuario",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombreUsuario\": \"{{nombreUsuarioNuevo}}\",\n  \"passwordHash\": \"{{passwordHashNuevo}}\",\n  \"correoElectronico\": \"{{correoElectronicoNuevo}}\"\n}"
+            },
+            "url": {
+              "raw": "https://localhost:7253/api/Usuario/RegistrarUsuario",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7253",
+              "path": [
+                "api",
+                "Usuario",
+                "RegistrarUsuario"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Registrar usuario responde 201', function () {",
+                  "  pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "const bodyText = pm.response.text().trim();",
+                  "if (bodyText) {",
+                  "  pm.collectionVariables.set('usuarioId', bodyText.replace(/\"/g, ''));",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Obtener informacion usuario",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombreUsuario\": \"{{nombreUsuarioBusqueda}}\",\n  \"passwordHash\": \"{{passwordHashBusqueda}}\",\n  \"correoElectronico\": \"{{correoElectronicoBusqueda}}\"\n}"
+            },
+            "url": {
+              "raw": "https://localhost:7253/api/Usuario/ObtenerInformacionUsuario",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7253",
+              "path": [
+                "api",
+                "Usuario",
+                "ObtenerInformacionUsuario"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Obtener informacion usuario responde 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Obtener perfiles por usuario",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7253/api/Usuario/ObtenerPerfilesxUsuario/{{usuarioId}}",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7253",
+              "path": [
+                "api",
+                "Usuario",
+                "ObtenerPerfilesxUsuario",
+                "{{usuarioId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Obtener perfiles responde 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://localhost:7253/"
+    },
+    {
+      "key": "accessToken",
+      "value": ""
+    },
+    {
+      "key": "usuarioId",
+      "value": ""
+    },
+    {
+      "key": "nombreUsuario",
+      "value": "usuario.demo"
+    },
+    {
+      "key": "passwordHash",
+      "value": "c7ad44cbad762a5dbd4e2e3f9f3d1b8e"
+    },
+    {
+      "key": "correoElectronico",
+      "value": "usuario.demo@correo.com"
+    },
+    {
+      "key": "nombreUsuarioNuevo",
+      "value": "usuario.nuevo"
+    },
+    {
+      "key": "passwordHashNuevo",
+      "value": "c7ad44cbad762a5dbd4e2e3f9f3d1b8e"
+    },
+    {
+      "key": "correoElectronicoNuevo",
+      "value": "usuario.nuevo@correo.com"
+    },
+    {
+      "key": "nombreUsuarioBusqueda",
+      "value": "usuario.demo"
+    },
+    {
+      "key": "passwordHashBusqueda",
+      "value": "c7ad44cbad762a5dbd4e2e3f9f3d1b8e"
+    },
+    {
+      "key": "correoElectronicoBusqueda",
+      "value": "usuario.demo@correo.com"
+    }
+  ]
+}

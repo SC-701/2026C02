@@ -1,6 +1,6 @@
 ---
 layout: cover
-theme: light-icons
+theme: seriph
 title: Ingeniería de Software Asistida por IA con GitHub Copilot
 info: Curso piloto · 2 sesiones × 3 horas
 author: Curso académico
